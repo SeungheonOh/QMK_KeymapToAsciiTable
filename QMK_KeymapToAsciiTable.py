@@ -1,3 +1,7 @@
+#
+# Keycodes Dictionary by Rionlion100, https://github.com/Rionlion100/qmk-comment-gen/blob/master/qmk_kc.py
+#
+
 keycodes={
     #BASIC KEYCODES
     "KC_NO,":" Null ,",
