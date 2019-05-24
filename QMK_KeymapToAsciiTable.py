@@ -1,9 +1,5 @@
-#
-# Keycodes Dictionary by Rionlion100, https://github.com/Rionlion100/qmk-comment-gen/blob/master/qmk_kc.py
-#
 
-
-QMKCodeDic={
+QMKCodeDic = {
     #BASICKEYCODES
     "KC_NO":"Null",
     "XXXXXXX":"Null",
@@ -520,173 +516,177 @@ QMKCodeDic={
 
 import json
 
-fileInput = open("keymap.c","r")
-fileInput = fileInput.readlines()
-
-layerStarts = False
-keymapStarts = False
-
-layers = []
-keymaps = []
-keymapTemp = []
-
-Btop='┬'      #top fill lines 
-Bmid='┼'     #middle row fill lines
-Blow='┴'
-
-file=open('comment.txt','w+',encoding='utf-8')
-file.write('\n')
-for line in fileInput:
-    line = line.replace('\n', '')
-    line = line.replace('\\', '')
-    line = line.replace(' ', '')
-    if 0 >= len(line):
-        continue
-    if line[0] == '*' or line[0] == '/':
-        continue
-    
-    if layerStarts == True and line.count('};'):
-        layerStarts = False
-
-    if layerStarts:
-        line = line.replace(',', '')
-        line = line.replace('_', '')
-        layers.append(line)
-
-    if line.count('layers{'):
-        layerStarts = True
-
-    if keymapStarts and line[0] == ')':
-        print("Layer '{0}' have been added".format(keymapStarts),file=file)
-        keymaps.append(keymapTemp)
-        keymapStarts = False
-        keymapTemp = []
-
-    if keymapStarts:
-        if line[len(line)-1] == ',':
-            line = line[:-1]
-        line = line.split(',')
-        keymapTemp.append(line)
-        
-    if len(layers) > 0 and layerStarts == False:
-        for layer in layers:
-            if line.count("[_{0}]".format(layer)):
-                keymapTemp.append(layer)
-                keymapStarts = layer
-    
-assert len(layers) > 0, "No Layer Found"
-assert len(keymaps) > 0, "No Keymap Found"
-
-print('',file=file)
-
-
 try:
-    with open("KeyboardLayout.json", "r+") as jsonfile:
-        pass
-except:
-    print('Generating layout file')
-    with open("KeyboardLayout.json", "w") as jsonfile:
-        print("{", file= jsonfile)
-        KeymapLayout = keymaps[0][1:]
-        rowIndex = 0
-        for row in KeymapLayout:
-            print("\"{0}\": ".format(rowIndex),file=jsonfile)
-            print("{",file=jsonfile)
-            keyIndex = 0
-            for key in row:
-                print("\"{0}\": 1".format(keyIndex),file=jsonfile, end='')
-                if keyIndex != len(row)-1:
+    fileInput = open("keymap.c","r")
+    fileInput = fileInput.readlines()
+
+    
+
+    layerStarts = False
+    keymapStarts = False
+
+    layers = []
+    keymaps = []
+    keymapTemp = []
+
+    Btop='┬'      #top fill lines 
+    Bmid='┼'     #middle row fill lines
+    Blow='┴'
+
+
+    file=open('comment.txt','w+',encoding='utf-8')
+    file.write('\n')
+
+
+    for line in fileInput:
+        line = line.replace('\n', '')
+        line = line.replace('\\', '')
+        line = line.replace(' ', '')
+        if 0 >= len(line):
+            continue
+        if line[0] == '*' or line[0] == '/':
+            continue
+        
+        if layerStarts == True and line.count('};'):
+            layerStarts = False
+
+        if layerStarts:
+            line = line.replace(',', '')
+            line = line.replace('_', '')
+            layers.append(line)
+
+        if line.count('layers{'):
+            layerStarts = True
+
+        if keymapStarts and line[0] == ')':
+            print("Layer '{0}' have been added".format(keymapStarts),file=file)
+            keymaps.append(keymapTemp)
+            keymapStarts = False
+            keymapTemp = []
+
+        if keymapStarts:
+            if line[len(line)-1] == ',':
+                line = line[:-1]
+            line = line.split(',')
+            keymapTemp.append(line)
+            
+        if len(layers) > 0 and layerStarts == False:
+            for layer in layers:
+                if line.count("[_{0}]".format(layer)):
+                    keymapTemp.append(layer)
+                    keymapStarts = layer
+        
+    assert len(layers) > 0, "No Layer Found"
+    assert len(keymaps) > 0, "No Keymap Found"
+
+    print('',file=file)
+
+
+    try:
+        with open("KeyboardLayout.json", "r+") as jsonfile:
+            pass
+    except:
+        print('Generating layout file')
+        with open("KeyboardLayout.json", "w") as jsonfile:
+            print("{", file= jsonfile)
+            KeymapLayout = keymaps[0][1:]
+            rowIndex = 0
+            for row in KeymapLayout:
+                print("\"{0}\": ".format(rowIndex),file=jsonfile)
+                print("{",file=jsonfile)
+                keyIndex = 0
+                for key in row:
+                    print("\"{0}\": 1".format(keyIndex),file=jsonfile, end='')
+                    if keyIndex != len(row)-1:
+                        print(',',file=jsonfile, end='')
+                    print(file=jsonfile)
+                    keyIndex += 1
+                print("}",file=jsonfile, end='')
+                if rowIndex != len(keymaps[0])-2:
                     print(',',file=jsonfile, end='')
                 print(file=jsonfile)
-                keyIndex += 1
-            print("}",file=jsonfile, end='')
-            if rowIndex != len(keymaps[0])-2:
-                print(',',file=jsonfile, end='')
-            print(file=jsonfile)
-            rowIndex += 1
-        print("}", file= jsonfile)
-        jsonfile.close()
-    print('Layout file generated, Modify KeyboardLayout.json, and re-run this script. \nRemeber this script does not supports keys sized in decimals USE INT NUMBER ONLY')
-
-    
-with open("KeyboardLayout.json", "r") as jsonfile:
-    layout = json.load(jsonfile)
-    for keymap in keymaps:
-        keysize = 2
-        print("/* {0}".format(keymap[0]),file=file)
-
-        print('',file=file)
-        print(" * ┌", end='',file=file)  
-        for i in range(len(keymap[1])-1): 
-            for _ in range(7 * layout["{0}".format(0)]["{0}".format(i)] - 1):
-                print('─', end='', file=file)
-            print(Btop, end='',file=file)  
-        for _ in range(7 * layout["{0}".format(0)]["{0}".format(len(keymap[1])-1)] - 1):
-            print('─', end='', file=file)
-        print("┐", end='',file=file)
+                rowIndex += 1
+            print("}", file= jsonfile)
+            jsonfile.close()
+        print('Layout file generated, Modify KeyboardLayout.json, and re-run this script. \nRemeber this script does not supports keys sized in decimals USE INT NUMBER ONLY')
 
         
-        for i in range(len(keymap)-1):
+    with open("KeyboardLayout.json", "r") as jsonfile:
+        layout = json.load(jsonfile)
+        for keymap in keymaps:
             keysize = 2
+            print("/* {0}".format(keymap[0]),file=file)
+
             print('',file=file)
-            print(" * ", end='',file=file)
-            print("│", end='',file=file)
-            itemIndex = 0
-            for item in keymap[i+1]:
-                spaces = int(((7 * layout["{0}".format(i)]["{0}".format(itemIndex)]  - 1 - len(QMKCodeDic[item]))) /2) + (len(QMKCodeDic[item]) - 1 + layout["{0}".format(i)]["{0}".format(itemIndex)])%2
-                for _ in range(spaces):
-                    print(' ', end='', file=file) 
-                print(QMKCodeDic[item], end='',file=file) 
-                for _ in range(spaces - (len(QMKCodeDic[item]) - 1 + layout["{0}".format(i)]["{0}".format(itemIndex)])%2):
-                    print(' ', end='', file=file)
-                print('│', end='',file=file) 
-                itemIndex += 1
-                
+            print(" * ┌", end='',file=file)  
+            for i in range(len(keymap[1])-1): 
+                for _ in range(7 * layout["{0}".format(0)]["{0}".format(i)] - 1):
+                    print('─', end='', file=file)
+                print(Btop, end='',file=file)  
+            for _ in range(7 * layout["{0}".format(0)]["{0}".format(len(keymap[1])-1)] - 1):
+                print('─', end='', file=file)
+            print("┐", end='',file=file)
+
             
-            print('',file=file)
-            print(" * ", end='',file=file)
-            print("", end='',file=file)
-            itemIndex = 0
-            for j in range(len(keymap[i+1])):
-                #print(j,len(keymap[i+1]), end='')
-                if j == 0 and i == len(keymap)-2:
-                    print("└", end='',file=file)
+            for i in range(len(keymap)-1):
+                keysize = 2
+                print('',file=file)
+                print(" * ", end='',file=file)
+                print("│", end='',file=file)
+                itemIndex = 0
+                for item in keymap[i+1]:
+                    spaces = int(((7 * layout["{0}".format(i)]["{0}".format(itemIndex)]  - 1 - len(QMKCodeDic[item]))) /2) + (len(QMKCodeDic[item]) - 1 + layout["{0}".format(i)]["{0}".format(itemIndex)])%2
+                    for _ in range(spaces):
+                        print(' ', end='', file=file) 
+                    print(QMKCodeDic[item], end='',file=file) 
+                    for _ in range(spaces - (len(QMKCodeDic[item]) - 1 + layout["{0}".format(i)]["{0}".format(itemIndex)])%2):
+                        print(' ', end='', file=file)
+                    print('│', end='',file=file) 
+                    itemIndex += 1
+                    
+                
+                print('',file=file)
+                print(" * ", end='',file=file)
+                print("", end='',file=file)
+                itemIndex = 0
+                for j in range(len(keymap[i+1])):
+                    #print(j,len(keymap[i+1]), end='')
+                    if j == 0 and i == len(keymap)-2:
+                        print("└", end='',file=file)
 
-                elif j == 0:
-                    print("├", end='',file=file)
+                    elif j == 0:
+                        print("├", end='',file=file)
 
-                elif j == len(keymap[i+1])-1 and i != len(keymap)-2:
-                    for _ in range(7 * layout["{0}".format(i)]["{0}".format(itemIndex)] - 1):
-                        print('─', end='', file=file)
-                    print("┤", end='',file=file)
+                    elif j == len(keymap[i+1])-1 and i != len(keymap)-2:
+                        for _ in range(7 * layout["{0}".format(i)]["{0}".format(itemIndex)] - 1):
+                            print('─', end='', file=file)
+                        print("┤", end='',file=file)
+                        break
+
+                    if  not i == 0 and (j == len(keymap[i+1])-1 and (j > len(keymap[i])-1 or i == len(keymap)-2)):
+                        for _ in range(7 * layout["{0}".format(i)]["{0}".format(itemIndex)] - 1):
+                            print('─', end='', file=file)
+                        print("┘", end='',file=file)
+                    elif i == len(keymap)-2 or j > len(keymap[i+2])-1:
+                        for _ in range(7 * layout["{0}".format(i)]["{0}".format(itemIndex)] - 1):
+                            print('─', end='', file=file)
+                        print(Blow, end='',file=file)
+                    else:
+                        for _ in range(7 * layout["{0}".format(i)]["{0}".format(itemIndex)] - 1):
+                            print('─', end='', file=file)
+                        print(Bmid, end='',file=file)
+                    itemIndex += 1
+
+                if i == len(keymap)-2:
                     break
 
-                if  not i == 0 and (j == len(keymap[i+1])-1 and (j > len(keymap[i])-1 or i == len(keymap)-2)):
-                    for _ in range(7 * layout["{0}".format(i)]["{0}".format(itemIndex)] - 1):
-                        print('─', end='', file=file)
-                    print("┘", end='',file=file)
-                elif i == len(keymap)-2 or j > len(keymap[i+2])-1:
-                    for _ in range(7 * layout["{0}".format(i)]["{0}".format(itemIndex)] - 1):
-                        print('─', end='', file=file)
-                    print(Blow, end='',file=file)
-                else:
-                    for _ in range(7 * layout["{0}".format(i)]["{0}".format(itemIndex)] - 1):
-                        print('─', end='', file=file)
-                    print(Bmid, end='',file=file)
-                itemIndex += 1
+            print('',file=file)
+            print(" */",file=file)
+            print('',file=file)
 
-            if i == len(keymap)-2:
-                break
+        file.close()
 
-
-            
-            
-
-        print('',file=file)
-        print(" */",file=file)
-        print('',file=file)
-
-    file.close()
-
+except:
+    print("You should execute this script the same directory where you keymap.c file is.")
 
 

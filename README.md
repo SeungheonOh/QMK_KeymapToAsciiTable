@@ -11,5 +11,3 @@ Python script, that get input from keymap.c and returns "comments.txt." "comment
 Basically, any layouts! 
 However, all keys will apear as 1u key, so it’s optimized for ortholinears, keep that in mind.
 
-# Referenced Codes
-Keycodes Dictionary by Rionlion100, https://github.com/Rionlion100/qmk-comment-gen/blob/master/qmk_kc.py
