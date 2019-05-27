@@ -12,15 +12,15 @@ Python script, that get input from keymap.c and returns "comments.txt." "comment
     2. Type in you keyboard configurations, the keysizes. For example, If you 1st row's first key is 2u, you should fine a part startes with `"0" : ` and change the first Item to 2. Remeber that the first row / key is always 0 not 1. One thing to keep in mind: this script does not support decimals for the `KeyboardLyout.json`. You should only use integers in it.
     3. Re-run the script, check the re generated `comment.txt`.
 
-    ![Structure of `KeyboardLayout.json`](Images\StructureOfKeyboardLayout.PNG)
+    ![Structure of `KeyboardLayout.json`](/Images/StructureOfKeyboardLayout.PNG)
 
 
 
 # Samples
 
-![Sample 1](Images\Sample_1.png)
+![Sample 1](/Images/Sample_1.png)
 
-![Sample 2](Images\Sample_2.png)
+![Sample 2](/Images/Sample_2.png)
 
 
 # What layout is supported?
