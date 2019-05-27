@@ -18,9 +18,9 @@ Python script, that get input from keymap.c and returns "comments.txt." "comment
 
 # Samples
 
-![Sample 1](/Images/Sample_1.png)
+![Sample 1](/Images/Sample_1.PNG)
 
-![Sample 2](/Images/Sample_2.png)
+![Sample 2](/Images/Sample_2.PNG)
 
 
 # What layout is supported?
