@@ -18,7 +18,7 @@ This script is based on basic Python, should work in every devices that has Pyth
 
 
 
-# Samples
+# Output samples
 
 ![Sample 1](/Images/Sample_1.PNG)
 
