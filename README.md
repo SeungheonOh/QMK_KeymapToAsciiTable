@@ -1,5 +1,7 @@
 # QMK_KeymapToAsciiTable
-Python script, that get input from keymap.c and returns "comments.txt." "comments.txt" contains searched layers, and commented ascii table for each layer(s).
+QMK_KeymapToAsciiTable is a python script, that automates boring and time consuming task of making ASCII table for your QMK powered keyboard. It gets input from `keymap.c` QMK format file, in it's directory, make a new file called `comment.txt`, that contains searched keylayers and of course ASCII table. 
+
+This script is based on basic Python, should work in every devices that has Python installed :O 
 
 
 # How to use?
@@ -35,8 +37,9 @@ Fork it, and Pull request!
 
 # ToDo:
 
+- [ ] BIG ASS ENTER support 
 - [x] Custom layout support
-- [ ] Find a better way to edit keyboard layout
+- [ ] Find a better way to edit keyboard layout, not editing Json by hand
 - [ ] Add decimal sized key(such as 1.5u) support
 
 # Thanks to...
